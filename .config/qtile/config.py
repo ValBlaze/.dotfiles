@@ -72,6 +72,10 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawn("rofi -show drun -show-emojies"), desc="Spawn a command using a prompt widget"),
+    # Sound
+    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -c 0 sset Master 1- unmute")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -c 0 sset Master 1+ unmute")),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -117,8 +121,8 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="sans",
-    fontsize=12,
+    font="firacode nerd font",
+    fontsize=11,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
@@ -127,18 +131,36 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.CurrentLayout(),
+                widget.TextBox(
+                    fontsize=16,
+                    foreground="#1793D1",
+                    text="󰣇",
+                ),
+                widget.GroupBox(),
+                widget.WindowName(),
+                widget.TextBox(
+                    fontsize=16,
+                    text="󰕾 ",
+                ),
+                widget.Volume(),
+                widget.BatteryIcon(),
+                widget.Battery(format="{percent:2.0%}"),
+                widget.Systray(),
+                widget.TextBox(
+                    fontsize=16,
+                    text=" "
+                ),
+                widget.Clock(),
             ],
-            24,
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+            22,
+            margin=5,
         ),
     ),
 ]
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button1", move_snap_window(snap_dist=40), start=lazy.window.get_position()),
+    Drag([mod], "Button1", move_snap_window(snap_dist=20), start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
