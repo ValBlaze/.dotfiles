@@ -36,7 +36,7 @@ terminal = "kitty"
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
-    # Switch between windows
+    # Switch between QWndows
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
@@ -108,7 +108,7 @@ layouts = [
     # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
-    layout.Bsp(),
+    layout.Bsp(margin = [0, 5, 5, 5]),
     layout.Max(),
     # layout.Matrix(),
     # layout.MonadTall(),
@@ -124,6 +124,7 @@ widget_defaults = dict(
     font="firacode nerd font",
     fontsize=11,
     padding=3,
+    foreground="#0D0F18",
 )
 extension_defaults = widget_defaults.copy()
 
@@ -141,19 +142,31 @@ screens = [
                 widget.TextBox(
                     fontsize=16,
                     text="󰕾 ",
+                    background="#91CDE9",
                 ),
-                widget.Volume(),
-                widget.BatteryIcon(),
-                widget.Battery(format="{percent:2.0%}"),
+                widget.Volume(
+                    background="#91CDE9",
+                ),
+                widget.BatteryIcon(
+                    background="#ECD3A0",
+                ),
+                widget.Battery(
+                    format="{percent:2.0%}",
+                    background="#ECD3A0",
+                ),
                 widget.Systray(),
                 widget.TextBox(
                     fontsize=16,
-                    text=" "
+                    text=" ",
+                    background="#90CEAA",
                 ),
-                widget.Clock(),
+                widget.Clock(
+                    background="#90CEAA",
+                ),
             ],
             22,
             margin=5,
+            background="#0D0F18",
         ),
     ),
 ]
@@ -168,8 +181,8 @@ mouse = [
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
-bring_front_click = False
-cursor_warp = False
+bring_front_click = True
+cursor_warp = True
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
