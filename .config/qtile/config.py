@@ -76,6 +76,8 @@ keys = [
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -c 0 sset Master 1- unmute")),
     Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -c 0 sset Master 1+ unmute")),
+    # Custom
+    Key([mod], "f", lazy.window.toggle_fullscreen()),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -108,7 +110,7 @@ layouts = [
     # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
-    layout.Bsp(margin = [0, 5, 5, 5]),
+    layout.Bsp(margin = [0, 10, 10, 10]),
     layout.Max(),
     # layout.Matrix(),
     # layout.MonadTall(),
@@ -147,6 +149,7 @@ screens = [
                 widget.Volume(
                     background="#91CDE9",
                 ),
+                widget.Sep(),
                 widget.BatteryIcon(
                     background="#ECD3A0",
                 ),
@@ -154,7 +157,9 @@ screens = [
                     format="{percent:2.0%}",
                     background="#ECD3A0",
                 ),
+                widget.Sep(), 
                 widget.Systray(),
+                widget.Sep(),
                 widget.TextBox(
                     fontsize=16,
                     text=" ",
@@ -165,7 +170,7 @@ screens = [
                 ),
             ],
             22,
-            margin=5,
+            margin=10,
             background="#0D0F18",
         ),
     ),
