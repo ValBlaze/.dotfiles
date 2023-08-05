@@ -110,7 +110,7 @@ layouts = [
     # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
-    layout.Bsp(margin = [0, 10, 10, 10]),
+    layout.Bsp(margin = [10, 10, 10, 10]),
     layout.Max(),
     # layout.Matrix(),
     # layout.MonadTall(),
@@ -170,7 +170,6 @@ screens = [
                 ),
             ],
             22,
-            margin=10,
             background="#0D0F18",
         ),
     ),
