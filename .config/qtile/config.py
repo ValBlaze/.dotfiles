@@ -139,7 +139,9 @@ screens = [
                     foreground="#1793D1",
                     text="󰣇",
                 ),
-                widget.GroupBox(),
+                widget.GroupBox(
+                    highlight_method="text",
+                ),
                 widget.WindowName(),
                 widget.TextBox(
                     fontsize=16,
@@ -150,14 +152,14 @@ screens = [
                     background="#91CDE9",
                 ),
                 widget.Sep(),
-                widget.BatteryIcon(
-                    background="#ECD3A0",
-                ),
-                widget.Battery(
-                    format="{percent:2.0%}",
-                    background="#ECD3A0",
-                ),
-                widget.Sep(), 
+                # widget.BatteryIcon(
+                #    background="#ECD3A0",
+                # ),
+                # widget.Battery(
+                #     format="{percent:2.0%}",
+                #     background="#ECD3A0",
+                # ),
+                # widget.Sep(), 
                 widget.Systray(),
                 widget.Sep(),
                 widget.TextBox(
