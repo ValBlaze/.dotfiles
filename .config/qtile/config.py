@@ -124,9 +124,6 @@ layouts = [
 
 widget_defaults = dict(
     font="firacode nerd font",
-    fontsize=11,
-    padding=3,
-    foreground="#0D0F18",
 )
 extension_defaults = widget_defaults.copy()
 
@@ -140,18 +137,27 @@ screens = [
                     text="󰣇",
                 ),
                 widget.GroupBox(
+                    fontsize=14,
                     highlight_method="text",
+                    active="#828282",
+                    inactive="#2d2e2e",
+                    this_current_screen_border="#FFFFFF",
+                    disable_drag=True,
                 ),
-                widget.WindowName(),
+                widget.WindowName(
+                    fontsize=14,
+                ),
+                widget.Systray(),
+                widget.Spacer(length=8),
                 widget.TextBox(
                     fontsize=16,
-                    text="󰕾 ",
+                    text="󰕾",
                     background="#91CDE9",
                 ),
                 widget.Volume(
                     background="#91CDE9",
                 ),
-                widget.Sep(),
+                widget.Spacer(length=8),
                 # widget.BatteryIcon(
                 #    background="#ECD3A0",
                 # ),
@@ -159,12 +165,10 @@ screens = [
                 #     format="{percent:2.0%}",
                 #     background="#ECD3A0",
                 # ),
-                # widget.Sep(), 
-                widget.Systray(),
-                widget.Sep(),
+                # widget.Spacer(), 
                 widget.TextBox(
                     fontsize=16,
-                    text=" ",
+                    text="",
                     background="#90CEAA",
                 ),
                 widget.Clock(
