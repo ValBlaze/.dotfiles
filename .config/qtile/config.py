@@ -150,12 +150,14 @@ screens = [
                 widget.Systray(),
                 widget.Spacer(length=8),
                 widget.TextBox(
-                    fontsize=16,
+                    fontsize=20,
                     text="󰕾",
                     background="#91CDE9",
+                    foreground="#0D0F18",
                 ),
                 widget.Volume(
                     background="#91CDE9",
+                    foreground="#0D0F18",
                 ),
                 widget.Spacer(length=8),
                 # widget.BatteryIcon(
@@ -167,12 +169,14 @@ screens = [
                 # ),
                 # widget.Spacer(), 
                 widget.TextBox(
-                    fontsize=16,
-                    text="",
+                    fontsize=20,
+                    text="",
                     background="#90CEAA",
+                    foreground="#0D0F18",
                 ),
                 widget.Clock(
                     background="#90CEAA",
+                    foreground="#0D0F18",
                 ),
             ],
             22,
