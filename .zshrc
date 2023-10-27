@@ -16,6 +16,9 @@ HISTFILE=~/.zsh_history
 # plug "$HOME/.config/zsh/aliases.zsh"
 # plug "$HOME/.config/zsh/exports.zsh"
 
+export EDITOR=nvim
+export VISUDO=nvim
+
 # plugins
 plug "esc/conda-zsh-completion"
 plug "zsh-users/zsh-autosuggestions"
