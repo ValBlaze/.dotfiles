@@ -40,6 +40,6 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Execute WM
 xrandr --output DisplayPort-0 --mode 1920x1080 --rate 144
-feh --bg-scale ~/Pictures/wallpapers/swimming-cat.png
-picom -f &
-exec qtile start
+feh --bg-scale ~/Pictures/blue-firewatch.jpg
+picom -b
+exec dwm
