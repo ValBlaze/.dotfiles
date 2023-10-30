@@ -13,8 +13,7 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,11 +23,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from libqtile import bar, layout, widget, hook
+from libqtile import bar, layout, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from floating_window_snapping import move_snap_window
+from qtile_extras import widget
+from qtile_extras.widget import decorations
+from qtile_extras.widget.decorations import RectDecoration
 import os
 import subprocess
 
@@ -118,7 +120,7 @@ layouts = [
     # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
-    layout.Bsp(margin = [10, 10, 10, 10]),
+    layout.Bsp(margin = [5, 5, 5, 5]),
     layout.Max(),
     # layout.Matrix(),
     # layout.MonadTall(),
@@ -130,8 +132,62 @@ layouts = [
     # layout.Zoomy(),
 ]
 
+def open_pavu():
+    qtile.cmd_spawn("pavucontrol")
+
+# separator
+def separator():
+    return widget.Sep(
+        foreground="0D0F18",
+        padding=4,
+        linewidth=3,
+    )
+
+
+def separator_sm():
+    return widget.Sep(
+        foreground="#0D0F18",
+        padding=1,
+        linewidth=1,
+        size_percent=55,
+    )
+
+def _left_decor(color: str, padding_x=None, padding_y=4, round=False):
+    radius = 4 if round else [4, 0, 0, 4]
+    return [
+        RectDecoration(
+            colour=color,
+            radius=radius,
+            filled=True,
+            padding_x=padding_x,
+            padding_y=padding_y,
+        )
+    ]
+
+def _right_decor(round=False):
+    radius = 4 if round else [0, 4, 4, 0]
+    return [
+        RectDecoration(
+            colour="#2C323C",
+            radius=radius,
+            filled=True,
+            padding_y=4,
+            padding_x=0,
+        )
+    ]
+
+def separator():
+    return widget.Sep(
+        foreground="#292D3E",
+        padding=4,
+        linewidth=3,
+    )
+
 widget_defaults = dict(
     font="firacode nerd font",
+    fontsize=15,
+    padding=2,
+    background="#292D3E",
 )
 extension_defaults = widget_defaults.copy()
 
@@ -146,7 +202,7 @@ screens = [
                 ),
                 widget.GroupBox(
                     fontsize=14,
-                    highlight_method="text",
+                    highlight_method="line",
                     active="#828282",
                     inactive="#2d2e2e",
                     this_current_screen_border="#FFFFFF",
@@ -155,40 +211,76 @@ screens = [
                 widget.WindowName(
                     fontsize=14,
                 ),
-                widget.Systray(),
+                widget.Systray(
+                    padding=5,
+                    icon_size=20,
+                ),
                 widget.Spacer(length=8),
                 widget.TextBox(
                     fontsize=20,
-                    text="󰕾",
-                    background="#91CDE9",
+                    text="墳",
+                    padding=8,
                     foreground="#0D0F18",
+                    decorations=_left_decor("#90CEAA"),
                 ),
-                widget.Volume(
-                    background="#91CDE9",
-                    foreground="#0D0F18",
+                separator_sm(),
+                widget.PulseVolume(
+                    foreground="#90CEAA",
+                    limit_max_volume='True',
+                    mouse_callbacks={'Button3': open_pavu},
+                    padding=8,
+                    decorations=_right_decor(),
                 ),
-                widget.Spacer(length=8),
-                # widget.BatteryIcon(
-                #    background="#ECD3A0",
-                # ),
-                # widget.Battery(
-                #     format="{percent:2.0%}",
-                #     background="#ECD3A0",
-                # ),
-                # widget.Spacer(), 
+                separator(),
+                widget.Wlan(
+                    format='󰖩',
+                    foreground="#292D3E",
+                    disconnected_message='󰖪',
+                    fontsize=16,
+                    interface='wlo1',
+                    update_interval=5,
+                    mouse_callbacks={
+                        'Button1': lambda: qtile.cmd_spawn('' + home + '/.local/bin/nmgui'),
+                        # 'Button3': lambda: qtile.cmd_spawn(myTerm + ' -e nmtui'),
+                    },
+                    padding=4,
+                    decorations=_left_decor("#ff5370"),
+                ),
+                separator_sm(),
+                widget.Wlan(
+                    format='{percent:2.0%}',
+                    disconnected_message=' ',
+                    interface='wlo1',
+                    update_interval=5,
+                    # mouse_callbacks={
+                        # 'Button1': lambda: qtile.cmd_spawn('' + home + '/.local/bin/nmgui'),
+                        # 'Button3': lambda: qtile.cmd_spawn(myTerm + ' -e nmtui'),
+                    #},
+                    padding=8,
+                    decorations=_right_decor(),
+                ),
+                separator(),
                 widget.TextBox(
-                    fontsize=20,
-                    text="",
-                    background="#90CEAA",
-                    foreground="#0D0F18",
+                    text='',
+                    fontsize=16,
+                    foreground="#292D3E",
+                    padding=8,
+                    decorations=_left_decor("#82b1ff"),
+                    # mouse_callbacks={'Button1': open_calendar},
                 ),
+                separator_sm(),
                 widget.Clock(
-                    background="#90CEAA",
-                    foreground="#0D0F18",
+                    format='%b %d, %H:%M',
+                    foreground="#82b1ff",
+                    padding=8,
+                    decorations=_right_decor(),
+                    # mouse_callbacks={'Button1': open_calendar},
                 ),
             ],
-            22,
-            background="#0D0F18",
+            30,
+            margin=[4, 6, 2, 6],
+            border_width=[0, 0, 0, 0],
+            border_color="#0D0F18",
         ),
     ),
 ]
