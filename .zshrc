@@ -13,11 +13,8 @@ fi
 HISTFILE=~/.zsh_history
 
 # source
-# plug "$HOME/.config/zsh/aliases.zsh"
-# plug "$HOME/.config/zsh/exports.zsh"
-
-export EDITOR=nvim
-export VISUDO=nvim
+plug "$HOME/.config/zsh/aliases.zsh"
+plug "$HOME/.config/zsh/exports.zsh"
 
 # plugins
 plug "esc/conda-zsh-completion"
