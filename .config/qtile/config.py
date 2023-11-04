@@ -314,7 +314,7 @@ screens = [
                 ),
                 separator_sm(),
                 widget.Clock(
-                    format='%b %d, %H:%M',
+                    format='%b %d, %I:%M %p',
                     foreground="#82b1ff",
                     padding=8,
                     decorations=_right_decor(),
