@@ -183,6 +183,37 @@ def separator():
         linewidth=3,
     )
 
+workspace_names = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+]
+
+group_box_settings = {
+    'active': "#bfc7d5",
+    'block_highlight_text_color': "#bfc7d5",
+    'this_current_screen_border': "#bfc7d5",
+    'this_screen_border': "#bfc7d5",
+    'urgent_border': "#ff5370",
+    'background': "#292D3E",  # background is [10-12]
+    'other_current_screen_border': "#bfc7d5",
+    'other_screen_border': "#bfc7d5",
+    'highlight_color': "#2C323C",
+    'inactive': "#3E4452",
+    'foreground': "#bfc7d5",
+    'borderwidth': 2,  # change to 2 to add bottom border to active group
+    'disable_drag': True,
+    'fontsize': 20,
+    'highlight_method': 'line',
+    'padding_x': 10,
+    'padding_y': 16,
+    'rounded': False,
+}
+
 widget_defaults = dict(
     font="firacode nerd font",
     fontsize=15,
@@ -195,32 +226,44 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.TextBox(
-                    fontsize=16,
-                    foreground="#1793D1",
-                    text="󰣇",
-                ),
                 widget.GroupBox(
-                    fontsize=14,
-                    highlight_method="line",
-                    active="#828282",
-                    inactive="#2d2e2e",
-                    this_current_screen_border="#FFFFFF",
-                    disable_drag=True,
+                    font="firacode nerd font",
+                    visible_groups=workspace_names,
+                    ** group_box_settings,
                 ),
+                separator(),
+                widget.Spacer(),
                 widget.WindowName(
-                    fontsize=14,
+                    foreground="#bfc7d5",
+                    width=bar.CALCULATED,
+                    empty_group_string='Desktop',
+                    max_chars=40,
                 ),
+                widget.Spacer(),
                 widget.Systray(
                     padding=5,
                     icon_size=20,
                 ),
-                widget.Spacer(length=8),
+                separator(),
+                widget.CurrentLayoutIcon(
+                    custom_icon_paths=[os.path.expanduser('~/.config/qtile/icons')],
+                    scale=0.65,
+                    use_mask=True,
+                    foreground="#292D3E",
+                    decorations=_left_decor("#FAE3B0"),
+                ),
+                separator_sm(),
+                widget.CurrentLayout(
+                    foreground="#FAE3B0",
+                    padding=8,
+                    decorations=_right_decor(),
+                ),
+                separator(),
                 widget.TextBox(
                     fontsize=20,
                     text="墳",
                     padding=8,
-                    foreground="#0D0F18",
+                    foreground="#292D3E",
                     decorations=_left_decor("#90CEAA"),
                 ),
                 separator_sm(),
@@ -233,29 +276,30 @@ screens = [
                 ),
                 separator(),
                 widget.Wlan(
-                    format='󰖩',
+                    format="󰖩 ",
                     foreground="#292D3E",
-                    disconnected_message='󰖪',
+                    disconnected_message="󰖪 ",
                     fontsize=16,
-                    interface='wlo1',
+                    interface='wlp6s0',
                     update_interval=5,
-                    mouse_callbacks={
-                        'Button1': lambda: qtile.cmd_spawn('' + home + '/.local/bin/nmgui'),
+                    # mouse_callbacks={
+                        #'Button1': lambda: qtile.cmd_spawn('' + home + '/.local/bin/nmgui'),
                         # 'Button3': lambda: qtile.cmd_spawn(myTerm + ' -e nmtui'),
-                    },
+                    # },
                     padding=4,
-                    decorations=_left_decor("#ff5370"),
+                    decorations=_left_decor("#ff869a"),
                 ),
                 separator_sm(),
                 widget.Wlan(
                     format='{percent:2.0%}',
+                    foreground="#ff869a",
                     disconnected_message=' ',
-                    interface='wlo1',
+                    interface='wlp6s0',
                     update_interval=5,
                     # mouse_callbacks={
                         # 'Button1': lambda: qtile.cmd_spawn('' + home + '/.local/bin/nmgui'),
                         # 'Button3': lambda: qtile.cmd_spawn(myTerm + ' -e nmtui'),
-                    #},
+                    # },
                     padding=8,
                     decorations=_right_decor(),
                 ),
