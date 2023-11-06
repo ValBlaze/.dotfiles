@@ -27,7 +27,7 @@ plug "romkatv/powerlevel10k"
 # keybinds
 bindkey '^ ' autosuggest-accept
 
-export PATH="$HOME/.local/bin":$PATH
+export PATH="$HOME/.local/bin":$HOME/.cargo/bin/:$PATH
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
