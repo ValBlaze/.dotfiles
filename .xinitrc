@@ -39,7 +39,7 @@ fi
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Execute WM
-xrandr --output DisplayPort-0 --mode 1920x1080 --rate 144
+xrandr --output DisplayPort-0 --mode 1920x1080 --rate 240
 feh --bg-scale ~/Pictures/blue-firewatch.jpg
 picom -b
-exec dwm
+qtile start

@@ -13,7 +13,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -23,30 +24,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from libqtile import bar, layout, hook
+from libqtile import bar, layout, qtile, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-from floating_window_snapping import move_snap_window
-from qtile_extras import widget
-from qtile_extras.widget import decorations
-from qtile_extras.widget.decorations import RectDecoration
-import os
-import subprocess
-
-@hook.subscribe.startup_once
-def autostart():
-    home = os.path.expanduser('~/.config/qtile/autostart.sh')
-    subprocess.Popen([home])
-
 
 mod = "mod4"
-terminal = "kitty"
+terminal = guess_terminal()
 
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
-    # Switch between QWndows
+    # Switch between windows
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
@@ -79,30 +68,45 @@ keys = [
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key(
+        [mod],
+        "f",
+        lazy.window.toggle_fullscreen(),
+        desc="Toggle fullscreen on the focused window",
+    ),
+    Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawn("rofi -show drun -show-emojies"), desc="Spawn a command using a prompt widget"),
-    # Sound
-    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -c 0 sset Master 1- unmute")),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -c 0 sset Master 1+ unmute")),
-    # Custom
-    Key([mod], "f", lazy.window.toggle_fullscreen()),
+    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
 ]
+
+# Add key bindings to switch VTs in Wayland.
+# We can't check qtile.core.name in default config as it is loaded before qtile is started
+# We therefore defer the check until the key binding is run by using .when(func=...)
+for vt in range(1, 8):
+    keys.append(
+        Key(
+            ["control", "mod1"],
+            f"f{vt}",
+            lazy.core.change_vt(vt).when(func=lambda: qtile.core.name == "wayland"),
+            desc=f"Switch to VT{vt}",
+        )
+    )
+
 
 groups = [Group(i) for i in "123456789"]
 
 for i in groups:
     keys.extend(
         [
-            # mod1 + letter of group = switch to group
+            # mod + group number = switch to group
             Key(
                 [mod],
                 i.name,
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
             ),
-            # mod1 + shift + letter of group = switch to & move focused window to group
+            # mod + shift + group number = switch to & move focused window to group
             Key(
                 [mod, "shift"],
                 i.name,
@@ -110,18 +114,18 @@ for i in groups:
                 desc="Switch to & move focused window to group {}".format(i.name),
             ),
             # Or, use below if you prefer not to switch to that group.
-            # # mod1 + shift + letter of group = move focused window to group
+            # # mod + shift + group number = move focused window to group
             # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
             #     desc="move focused window to group {}".format(i.name)),
         ]
     )
 
 layouts = [
-    # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
+    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
+    layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
-    layout.Bsp(margin = [5, 5, 5, 5]),
-    layout.Max(),
+    # layout.Bsp(),
     # layout.Matrix(),
     # layout.MonadTall(),
     # layout.MonadWide(),
@@ -132,206 +136,49 @@ layouts = [
     # layout.Zoomy(),
 ]
 
-def open_pavu():
-    qtile.cmd_spawn("pavucontrol")
-
-# separator
-def separator():
-    return widget.Sep(
-        foreground="0D0F18",
-        padding=4,
-        linewidth=3,
-    )
-
-
-def separator_sm():
-    return widget.Sep(
-        foreground="#0D0F18",
-        padding=1,
-        linewidth=1,
-        size_percent=55,
-    )
-
-def _left_decor(color: str, padding_x=None, padding_y=4, round=False):
-    radius = 4 if round else [4, 0, 0, 4]
-    return [
-        RectDecoration(
-            colour=color,
-            radius=radius,
-            filled=True,
-            padding_x=padding_x,
-            padding_y=padding_y,
-        )
-    ]
-
-def _right_decor(round=False):
-    radius = 4 if round else [0, 4, 4, 0]
-    return [
-        RectDecoration(
-            colour="#2C323C",
-            radius=radius,
-            filled=True,
-            padding_y=4,
-            padding_x=0,
-        )
-    ]
-
-def separator():
-    return widget.Sep(
-        foreground="#292D3E",
-        padding=4,
-        linewidth=3,
-    )
-
-workspace_names = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-]
-
-group_box_settings = {
-    'active': "#bfc7d5",
-    'block_highlight_text_color': "#bfc7d5",
-    'this_current_screen_border': "#bfc7d5",
-    'this_screen_border': "#bfc7d5",
-    'urgent_border': "#ff5370",
-    'background': "#292D3E",  # background is [10-12]
-    'other_current_screen_border': "#bfc7d5",
-    'other_screen_border': "#bfc7d5",
-    'highlight_color': "#2C323C",
-    'inactive': "#3E4452",
-    'foreground': "#bfc7d5",
-    'borderwidth': 2,  # change to 2 to add bottom border to active group
-    'disable_drag': True,
-    'fontsize': 20,
-    'highlight_method': 'line',
-    'padding_x': 10,
-    'padding_y': 16,
-    'rounded': False,
-}
-
 widget_defaults = dict(
-    font="firacode nerd font",
-    fontsize=15,
-    padding=2,
-    background="#292D3E",
+    font="sans",
+    fontsize=12,
+    padding=3,
 )
 extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        top=bar.Bar(
+        bottom=bar.Bar(
             [
-                widget.GroupBox(
-                    font="firacode nerd font",
-                    visible_groups=workspace_names,
-                    ** group_box_settings,
+                widget.CurrentLayout(),
+                widget.GroupBox(),
+                widget.Prompt(),
+                widget.WindowName(),
+                widget.Chord(
+                    chords_colors={
+                        "launch": ("#ff0000", "#ffffff"),
+                    },
+                    name_transform=lambda name: name.upper(),
                 ),
-                separator(),
-                widget.Spacer(),
-                widget.WindowName(
-                    foreground="#bfc7d5",
-                    width=bar.CALCULATED,
-                    empty_group_string='Desktop',
-                    max_chars=40,
-                ),
-                widget.Spacer(),
-                widget.Systray(
-                    padding=5,
-                    icon_size=20,
-                ),
-                separator(),
-                widget.CurrentLayoutIcon(
-                    custom_icon_paths=[os.path.expanduser('~/.config/qtile/icons')],
-                    scale=0.65,
-                    use_mask=True,
-                    foreground="#292D3E",
-                    decorations=_left_decor("#FAE3B0"),
-                ),
-                separator_sm(),
-                widget.CurrentLayout(
-                    foreground="#FAE3B0",
-                    padding=8,
-                    decorations=_right_decor(),
-                ),
-                separator(),
-                widget.TextBox(
-                    fontsize=20,
-                    text="墳",
-                    padding=8,
-                    foreground="#292D3E",
-                    decorations=_left_decor("#90CEAA"),
-                ),
-                separator_sm(),
-                widget.PulseVolume(
-                    foreground="#90CEAA",
-                    limit_max_volume='True',
-                    mouse_callbacks={'Button3': open_pavu},
-                    padding=8,
-                    decorations=_right_decor(),
-                ),
-                separator(),
-                widget.Wlan(
-                    format="󰖩 ",
-                    foreground="#292D3E",
-                    disconnected_message="󰖪 ",
-                    fontsize=16,
-                    interface='wlp6s0',
-                    update_interval=5,
-                    # mouse_callbacks={
-                        #'Button1': lambda: qtile.cmd_spawn('' + home + '/.local/bin/nmgui'),
-                        # 'Button3': lambda: qtile.cmd_spawn(myTerm + ' -e nmtui'),
-                    # },
-                    padding=4,
-                    decorations=_left_decor("#ff869a"),
-                ),
-                separator_sm(),
-                widget.Wlan(
-                    format='{percent:2.0%}',
-                    foreground="#ff869a",
-                    disconnected_message=' ',
-                    interface='wlp6s0',
-                    update_interval=5,
-                    # mouse_callbacks={
-                        # 'Button1': lambda: qtile.cmd_spawn('' + home + '/.local/bin/nmgui'),
-                        # 'Button3': lambda: qtile.cmd_spawn(myTerm + ' -e nmtui'),
-                    # },
-                    padding=8,
-                    decorations=_right_decor(),
-                ),
-                separator(),
-                widget.TextBox(
-                    text='',
-                    fontsize=16,
-                    foreground="#292D3E",
-                    padding=8,
-                    decorations=_left_decor("#82b1ff"),
-                    # mouse_callbacks={'Button1': open_calendar},
-                ),
-                separator_sm(),
-                widget.Clock(
-                    format='%b %d, %I:%M %p',
-                    foreground="#82b1ff",
-                    padding=8,
-                    decorations=_right_decor(),
-                    # mouse_callbacks={'Button1': open_calendar},
-                ),
+                widget.TextBox("default config", name="default"),
+                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
+                # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
+                # widget.StatusNotifier(),
+                widget.Systray(),
+                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+                widget.QuickExit(),
             ],
-            30,
-            margin=[4, 6, 2, 6],
-            border_width=[0, 0, 0, 0],
-            border_color="#0D0F18",
+            24,
+            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
+            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),
+        # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
+        # By default we handle these events delayed to already improve performance, however your system might still be struggling
+        # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
+        # x11_drag_polling_rate = 60,
     ),
 ]
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button1", move_snap_window(snap_dist=20), start=lazy.window.get_position()),
+    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
@@ -339,8 +186,9 @@ mouse = [
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
-bring_front_click = True
-cursor_warp = True
+bring_front_click = False
+floats_kept_above = True
+cursor_warp = False
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
@@ -363,6 +211,10 @@ auto_minimize = True
 
 # When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = None
+
+# xcursor theme (string or None) and size (integer) for Wayland backend
+wl_xcursor_theme = None
+wl_xcursor_size = 24
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
