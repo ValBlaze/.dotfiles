@@ -6,7 +6,6 @@ return {
       require "configs.conform"
     end,
   },
-
   -- These are some examples, uncomment them if you want to see them work!
   {
     "neovim/nvim-lspconfig",
@@ -14,6 +13,13 @@ return {
       require("nvchad.configs.lspconfig").defaults()
       require "configs.lspconfig"
     end,
+  },
+
+  {
+    "ellisonleao/carbon-now.nvim",
+    lazy = true,
+    cmd = "CarbonNow",
+    opts = {},
   },
 
   {
