@@ -23,6 +23,31 @@ return {
   },
 
   {
+    "mfussenegger/nvim-dap",
+  },
+
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "mfussenegger/nvim-dap",
+    },
+    opts = {
+      handlers = {},
+    },
+  },
+
+  {
+    "rcarriga/nvim-dap-ui",
+    event = "VeryLazy",
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+    config = function()
+      require "configs.nvim-dap-ui"
+    end,
+  },
+
+  {
     "williamboman/mason.nvim",
     opts = {
       ensure_installed = {
@@ -32,6 +57,7 @@ return {
         "css-lsp",
         "prettier",
         "clangd",
+        "codelldb",
       },
     },
   },
