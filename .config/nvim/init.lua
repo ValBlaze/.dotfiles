@@ -14,5 +14,5 @@ vim.o.mouse = 'a'
 vim.o.showmode = false -- already in the status line
 
 vim.schedule(function()
-	vim.o.clipboard = 'unnamedplus'
+    vim.o.clipboard = 'unnamedplus'
 end)
