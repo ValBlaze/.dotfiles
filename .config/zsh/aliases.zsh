@@ -1,4 +1,7 @@
 alias cat="bat"
+alias man="batman"
+alias entr="batwatch"
+alias diff="batdiff"
 
 # To avoid mistakes
 alias rm="rm -i"
