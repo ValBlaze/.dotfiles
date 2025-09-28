@@ -1,8 +1,1 @@
-[General]
-ColorScheme=CatppuccinMacchiatoFlamingo
-
-[Icons]
-Theme=breeze-dark
-
-[KDE]
-widgetStyle=Breeze
+../../.dotfiles/.config/kdedefaults/kdeglobals
