@@ -7,4 +7,3 @@ alias mv="mv -i"
 
 # QoL Stuff
 alias fucking="sudo"
-alias y="echo Hey $USERNAME, you can stop spamming Y"
