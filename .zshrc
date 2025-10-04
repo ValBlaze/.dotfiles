@@ -25,6 +25,7 @@ plug "wintermi/zsh-rust"
 
 # Keybinds
 bindkey "^ " autosuggest-accept
+bindkey -v
 
 # Source
 plug "$HOME/.config/zsh/aliases.zsh"
