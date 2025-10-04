@@ -21,7 +21,6 @@ compinit
 # Plugins
 plug "romkatv/powerlevel10k"
 plug "zap-zsh/exa"
-plug "zap-zsh/sudo"
 plug "wintermi/zsh-rust"
 
 # Keybinds
