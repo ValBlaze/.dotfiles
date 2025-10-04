@@ -21,11 +21,8 @@ compinit
 # Plugins
 plug "romkatv/powerlevel10k"
 plug "zap-zsh/exa"
+plug "zap-zsh/vim"
 plug "wintermi/zsh-rust"
-
-# Keybinds
-bindkey "^ " autosuggest-accept
-bindkey -v
 
 # Source
 plug "$HOME/.config/zsh/aliases.zsh"
