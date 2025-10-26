@@ -28,6 +28,11 @@ plug "wintermi/zsh-rust"
 plug "$HOME/.config/zsh/aliases.zsh"
 plug "$HOME/.config/zsh/exports.zsh"
 
+# Keybinds
+bindkey "^H" backward-kill-word
+
+export PATH="/usr/lib/qt6/bin/:$PATH"
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
@@ -41,3 +46,11 @@ function y() {
 }
 
 eval "$(zoxide init zsh --cmd cd)"
+
+# pnpm
+export PNPM_HOME="/home/valblaze/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
