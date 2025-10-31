@@ -185,6 +185,10 @@ return {
 			pyright = {},
 			rust_analyzer = {},
 			hyprls = {},
+			bashls = {},
+			cmake = {},
+			cssls = {},
+			yamlls = {},
 			-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 			--
 			-- Some languages (like typescript) have entire language plugins that can be useful:
@@ -209,9 +213,10 @@ return {
 		-- Ensure the servers and tools above are installed
 		local ensure_installed = vim.tbl_keys(servers or {})
 		vim.list_extend(ensure_installed, {
-			"stylua", -- Used to format Lua code
-			"prettier",
+			"stylua", -- lua formatter
+			"prettierd", -- js/ts formatter
 			"clang-format",
+			"ruff", -- python formatter and linter
 		})
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 

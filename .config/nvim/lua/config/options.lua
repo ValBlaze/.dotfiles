@@ -6,7 +6,7 @@ vim.g.have_nerd_font = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
 vim.o.softtabstop = -1 -- same as shiftwidth
-vim.o.expandtab = false
+vim.o.expandtab = true -- use spaces instead of tabs
 
 vim.o.number = true
 vim.o.relativenumber = true
